@@ -28,3 +28,4 @@ resource "aws_iam_role" "reds-role-lambdarole" {
 }
 POLICY
 }
+output "aws_iam_role_id" { value = "${aws_iam_role.reds-role-lambdarole.id}" }

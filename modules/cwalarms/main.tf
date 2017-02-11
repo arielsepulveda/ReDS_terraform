@@ -81,3 +81,7 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSNoCredits" {
         DBInstanceIdentifier = "${var.rds_instance}"
     }
 }
+
+output "reds-alarms-ReDSAlarmHigh_id" { value = "aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmHigh.id"}
+output "reds-alarms-ReDSAlarmLow_id"  { value = "aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmLow.id"}
+output "reds-alarms-ReDSNoCredits_id" { value = "aws_cloudwatch_metric_alarm.reds-alarms-ReDSNoCredits.id"}
