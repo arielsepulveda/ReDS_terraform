@@ -88,6 +88,11 @@ resource "null_resource" "buildlambdazip" {
   echo "${data.template_file.vars.rendered}" > lambda/vars.yaml
   cd lambda/
   zip -r ../tmp/${var.stack_prefix}-${var.timestamp_taken}.zip ./*
+  while [ ! -f ../tmp/${var.stack_prefix}-${var.timestamp_taken}.zip ]
+  do
+  sleep 2
+  echo "Waiting for .zip file"
+  done
   cd ..
 EOF
   }
