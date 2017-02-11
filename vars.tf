@@ -3,8 +3,10 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 ### Access Key --------------------------
+# DO NOT PUT YOUR ACCESS KEY HERE use terraform.tfvars
 variable "AWS_ACCESS_KEY" {}
 variable "AWS_SECRET_KEY" {}
+
 ### AWS Region --------------------------
 variable "AWS_REGION" {
   default = "us-west-2"
