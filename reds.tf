@@ -11,15 +11,15 @@ module "iamrole" {
   stack_prefix  = "${var.stack_prefix}"
 }
 
-# Create S3 Bucket
+# Create S3 Bucket  /// not needed
 # - - - - - - - - - - - - -
-
-module "s3bucket" {
-  source        = "modules/s3bucket"
-  unique_name   = "${var.timestamp_taken}"
-  stack_prefix  = "${var.stack_prefix}"
-}
-
+#
+#module "s3bucket" {
+#  source        = "modules/s3bucket"
+#  unique_name   = "${var.timestamp_taken}"
+#  stack_prefix  = "${var.stack_prefix}"
+#}
+#
 # Create Alarms
 # - - - - - - - - - - - - -
 
@@ -42,9 +42,9 @@ module "cwalarms" {
 data "template_file" "alarms" {
     template = "${file("modules/lambdafn/alarms.yaml.template")}"
     vars {
-        alarm_high    = "${module.cwalarms.reds-alarms-ReDSAlarmHigh_id}"
-        alarm_low     = "${module.cwalarms.reds-alarms-ReDSAlarmLow_id}"
-        alarm_credits = "${module.cwalarms.reds-alarms-ReDSNoCredits_id}"
+        alarm-credits = "${module.cwalarms.reds-alarms-ReDSNoCredits_id}"
+        alarm-low     = "${module.cwalarms.reds-alarms-ReDSAlarmLow_id}"
+        alarm-high    = "${module.cwalarms.reds-alarms-ReDSAlarmHigh_id}"
     }
 }
 
@@ -79,17 +79,17 @@ data "template_file" "vars" {
 resource "null_resource" "buildlambdazip" {
   triggers { key = "${uuid()}" }
   provisioner "local-exec" {
-  command = <<EOT
+  command = <<EOF
   rm -rf lambda && rm -rf tmp
   mkdir lambda && mkdir tmp
   unzip reds/deps.zip -d lambda/
   cp reds/reds.py lambda/reds.py
-  echo "${data.template_file.alarms.rendered}" > lambda/alarms.yaml"
-  echo "${data.template_file.vars.rendered}" > lambda/vars.yaml"
+  echo "${data.template_file.alarms.rendered}" > lambda/alarms.yaml
+  echo "${data.template_file.vars.rendered}" > lambda/vars.yaml
   cd lambda/
   zip -r ../tmp/${var.stack_prefix}-${var.timestamp_taken}.zip ./*
   cd ..
-EOT
+EOF
   }
 }
 

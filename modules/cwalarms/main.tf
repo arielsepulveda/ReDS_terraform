@@ -82,6 +82,6 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSNoCredits" {
     }
 }
 
-output "reds-alarms-ReDSAlarmHigh_id" { value = "aws_cloudwatch_metric_alarm.${stack_prefix}-alarms-ReDSAlarmHigh.id"}
-output "reds-alarms-ReDSAlarmLow_id"  { value = "aws_cloudwatch_metric_alarm.${stack_prefix}-alarms-ReDSAlarmLow.id"}
-output "reds-alarms-ReDSNoCredits_id" { value = "aws_cloudwatch_metric_alarm.${stack_prefix}-alarms-ReDSNoCredits.id"}
+output "reds-alarms-ReDSAlarmHigh_id" { value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmHigh.id}" }
+output "reds-alarms-ReDSAlarmLow_id"  { value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmLow.id}"  }
+output "reds-alarms-ReDSNoCredits_id" { value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSNoCredits.id}" }

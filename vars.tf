@@ -12,11 +12,11 @@ variable "AWS_REGION" {
 }
 
 # this will create a resource every time.
-variable "timestamp_taken" { default = "{{timestamp}}" }
+# not work// variable "timestamp_taken" { default = "{{timestamp}}" }
 # this will ASK you for the unique name
-# variable "timestamp_taken" {
-#   description = "Enter Unique Name or TimeStamp"
-# }
+variable "timestamp_taken" {
+  description = "Enter Unique Name or TimeStamp"
+}
 
 ### Main Configuration --------------------------
 variable "rds_instance" {
@@ -91,3 +91,7 @@ variable "credits_cooldown" {
   default = "10"
   description = "Cooldown for Credits"
 }
+### Others --------------------------
+variable "alarm-high" {default = ""}
+variable "alarm-low" {default = ""}
+variable "alarm-credits" {default = ""}
