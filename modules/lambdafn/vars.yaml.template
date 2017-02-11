@@ -1,0 +1,26 @@
+stack_prefix: ${stack-prefix}
+region: ${aws-region}
+instance_sizes:
+  - ${instance-size-1}
+  - ${instance-size-2}
+  - ${instance-size-3}
+  - ${instance-size-4}
+  - ${instance-size-5}
+scale_down:
+  cron: ${down-cron}
+  alarm_duration: ${down-alarm-duration}
+  threshold: ${down-threshold}
+  cooldown: ${down-cooldown	}
+scale_up:
+  cron: ${up-cron}
+  alarm_duration: ${up-alarm-duration}
+  threshold: ${up-threshold}
+  cooldown: ${up-cooldown}
+credits:
+  alarm_duration: ${credits-alarm-duration}
+  threshold: ${credits-threshold}
+  cooldown: ${credits-cooldown}
+enabled: ${enabled}
+scheduled_index: ${scheduled-index}
+schedule_enabled: ${schedule-enabled}
+rds_identifier: ${rds-identifier}

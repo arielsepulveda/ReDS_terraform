@@ -1,0 +1,5 @@
+---
+alarm_high:  ${alarm_high}
+alarm_low:  ${alarm_low}
+alarm_credits:  ${alarm_credits}
+...

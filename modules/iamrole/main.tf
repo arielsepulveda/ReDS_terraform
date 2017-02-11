@@ -2,17 +2,15 @@
 # IAM Role variables
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-variable "unique_name" {
-  description = "Unique name for IAM Role"
-}
+variable "unique_name"    {}
+variable "stack_prefix"   {}
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # IAM Role resources
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 resource "aws_iam_role" "reds-role-lambdarole" {
-    name               = "reds-role-lambdarole-${var.unique_name}"
-    path               = "/"
-    assume_role_policy = "${file("lambdarole.json")}"
+    name               = "${var.stack_prefix}-role-lambdarole"
+    assume_role_policy = "${file("modules/iamrole/lambdarole.json")}"
 }
-output "aws_iam_role_id" { value = "${aws_iam_role.reds-role-lambdarole.id}" }
+output "aws_iam_role_arn" { value = "${aws_iam_role.reds-role-lambdarole.arn}" }

@@ -2,11 +2,11 @@
 # ALARM variables
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+variable "unique_name"    {}
+variable "stack_prefix"   {}
+
 variable "rds_instance" {
   description = "RDS Instance to monitor"
-}
-variable "unique_name" {
-  description = "Unique name for resources"
 }
 variable "up_threshold" {
   default = "80.0"
@@ -38,7 +38,7 @@ variable "credit_evaluations" {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmHigh" {
-    alarm_name          = "reds-alarms-ReDSAlarmHigh-${var.unique_name}"
+    alarm_name          = "${var.stack_prefix}-alarms-ReDSAlarmHigh-${var.unique_name}"
     comparison_operator = "GreaterThanOrEqualToThreshold"
     evaluation_periods  = "${var.up_evaluations}"
     metric_name         = "CPUUtilization"
@@ -53,7 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmHigh" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmLow" {
-    alarm_name          = "reds-alarms-ReDSAlarmLow-${var.unique_name}"
+    alarm_name          = "${var.stack_prefix}-alarms-ReDSAlarmLow-${var.unique_name}"
     comparison_operator = "LessThanOrEqualToThreshold"
     evaluation_periods  = "${var.down_evaluations}"
     metric_name         = "CPUUtilization"
@@ -68,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmLow" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSNoCredits" {
-    alarm_name          = "reds-alarms-ReDSNoCredits-${var.unique_name}"
+    alarm_name          = "${var.stack_prefix}-alarms-ReDSNoCredits-${var.unique_name}"
     comparison_operator = "LessThanOrEqualToThreshold"
     evaluation_periods  = "${var.credit_evaluations}"
     metric_name         = "CPUCreditBalance"
@@ -82,6 +82,6 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSNoCredits" {
     }
 }
 
-output "reds-alarms-ReDSAlarmHigh_id" { value = "aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmHigh.id"}
-output "reds-alarms-ReDSAlarmLow_id"  { value = "aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmLow.id"}
-output "reds-alarms-ReDSNoCredits_id" { value = "aws_cloudwatch_metric_alarm.reds-alarms-ReDSNoCredits.id"}
+output "reds-alarms-ReDSAlarmHigh_id" { value = "aws_cloudwatch_metric_alarm.${stack_prefix}-alarms-ReDSAlarmHigh.id"}
+output "reds-alarms-ReDSAlarmLow_id"  { value = "aws_cloudwatch_metric_alarm.${stack_prefix}-alarms-ReDSAlarmLow.id"}
+output "reds-alarms-ReDSNoCredits_id" { value = "aws_cloudwatch_metric_alarm.${stack_prefix}-alarms-ReDSNoCredits.id"}
