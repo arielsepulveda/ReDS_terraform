@@ -1,6 +1,6 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # ALARM variables
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 variable "unique_name"    {}
 variable "stack_prefix"   {}
@@ -33,9 +33,12 @@ variable "credit_evaluations" {
   description = "CPU Credits Exhausted Alarm evaluation periods"
 }
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # ALARM resources
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+# Create Cloudwatch Alarm for RDS CPU HIGH
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmHigh" {
     alarm_name          = "${var.stack_prefix}-alarms-ReDSAlarmHigh-${var.unique_name}"
@@ -52,6 +55,9 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmHigh" {
     }
 }
 
+# Create Cloudwatch Alarm for RDS CPU LOW
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmLow" {
     alarm_name          = "${var.stack_prefix}-alarms-ReDSAlarmLow-${var.unique_name}"
     comparison_operator = "LessThanOrEqualToThreshold"
@@ -66,6 +72,9 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSAlarmLow" {
         DBInstanceIdentifier = "${var.rds_instance}"
     }
 }
+
+# Create Cloudwatch Alarm for "Credits"
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSNoCredits" {
     alarm_name          = "${var.stack_prefix}-alarms-ReDSNoCredits-${var.unique_name}"
@@ -82,6 +91,15 @@ resource "aws_cloudwatch_metric_alarm" "reds-alarms-ReDSNoCredits" {
     }
 }
 
-output "reds-alarms-ReDSAlarmHigh_id" { value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmHigh.id}" }
-output "reds-alarms-ReDSAlarmLow_id"  { value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmLow.id}"  }
-output "reds-alarms-ReDSNoCredits_id" { value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSNoCredits.id}" }
+# Output all alarm IDs
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+output "reds-alarms-ReDSAlarmHigh_id" {
+  value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmHigh.id}"
+}
+output "reds-alarms-ReDSAlarmLow_id"  {
+  value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSAlarmLow.id}"
+}
+output "reds-alarms-ReDSNoCredits_id" {
+  value = "${aws_cloudwatch_metric_alarm.reds-alarms-ReDSNoCredits.id}"
+}

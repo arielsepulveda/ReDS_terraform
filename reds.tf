@@ -1,9 +1,9 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # MAIN ReDS Terraform File
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 # Create Lambda Role
-# - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module "iamrole" {
   source     	  = "modules/iamrole"
@@ -11,17 +11,8 @@ module "iamrole" {
   stack_prefix  = "${var.stack_prefix}"
 }
 
-# Create S3 Bucket  /// not needed
-# - - - - - - - - - - - - -
-#
-#module "s3bucket" {
-#  source        = "modules/s3bucket"
-#  unique_name   = "${var.timestamp_taken}"
-#  stack_prefix  = "${var.stack_prefix}"
-#}
-#
-# Create Alarms
-# - - - - - - - - - - - - -
+# Create Cloudwatch Alarms
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module "cwalarms" {
   source        	    = "modules/cwalarms"
@@ -37,7 +28,7 @@ module "cwalarms" {
 }
 
 # Build YAML Templates
-# - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 data "template_file" "alarms" {
     template = "${file("modules/lambdafn/alarms.yaml.template")}"
@@ -76,27 +67,8 @@ data "template_file" "vars" {
     }
 }
 
-resource "null_resource" "buildlambdazip" {
-  triggers { key = "${uuid()}" }
-  provisioner "local-exec" {
-  command = <<EOF
-  rm -rf lambda && rm -rf tmp
-  mkdir lambda && mkdir tmp
-  unzip reds/deps.zip -d lambda/
-  cp reds/reds.py lambda/reds.py
-  echo "${data.template_file.alarms.rendered}" > lambda/alarms.yaml
-  echo "${data.template_file.vars.rendered}" > lambda/vars.yaml
-  cd lambda/
-  zip -r ../tmp/${var.stack_prefix}-${var.timestamp_taken}.zip ./*
-  while [ ! -f ../tmp/${var.stack_prefix}-${var.timestamp_taken}.zip ]
-  do
-  sleep 2
-  echo "Waiting for .zip file"
-  done
-  cd ..
-EOF
-  }
-}
+# Build and Create Lambda resources
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 module "lambdafn" {
   source        	   = "modules/lambdafn"
@@ -104,4 +76,6 @@ module "lambdafn" {
   lambda_file        = "tmp/${var.stack_prefix}-${var.timestamp_taken}.zip"
   stack_prefix       = "${var.stack_prefix}"
   aws_iam_role_arn   = "${module.iamrole.aws_iam_role_arn}"
+  alarms_yaml_render = "${data.template_file.alarms.rendered}"
+  vars_yaml_render   = "${data.template_file.vars.rendered}"
 }
