@@ -76,15 +76,14 @@ goes ahead and resize the instance to db.t2.micro (DB pointer 0).
 
 ##### Standard Setup (without ReDS) – High Performance required 24/7:
 
-M4.large – 100% monthly use: $261
+- M4.large – 100% monthly use: $261
 [- Amazon Calculator -](https://calculator.s3.amazonaws.com/index.html#r=PDX&s=RDS&key=calc-A2583B0A-0A08-48AE-A84F-86344E9723CD)
 
 ##### ReDS Setup – High Performance during peak hours, with evenings lower + weekends lowest:
 
-M4.large – 24% monthly use (M-F 9-5): $67
-T2.medium – 50% monthly use (M-F off hours): $55
-T2.small – 26% monthly use (Sat/Sun all day): $18
-
+- M4.large – 24% monthly use (M-F 9-5): $67
+- T2.medium – 50% monthly use (M-F off hours): $55
+- T2.small – 26% monthly use (Sat/Sun all day): $18
 [- Amazon Calculator -](https://calculator.s3.amazonaws.com/index.html#r=IAD&s=RDS&key=calc-2451517A-F680-4AEF-AEE6-A9C1F2EFCAF8)
 
 In this example, you will save
