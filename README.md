@@ -1,22 +1,35 @@
 # ReDS - ReActive Database System
-
-### Terraform - Auto-Scale for RDS Instances
-##### This can save you up to 50% on your RDS costs, and keep your DB online with traffic spikes
-
-This is based on [The Reactive Database System](http://mediatemple.net/blog/tips/the-reactive-database-system-letting-the-cloud-help-you/) by Dan Billeci.
+## Terraform - Auto-Scale for RDS Instances
+### This can save you up to 50% on your RDS costs, and avoid headaches on traffic spikes!
 
 ![reds](https://cloud.githubusercontent.com/assets/20051003/22879727/9cda7ed2-f1df-11e6-817e-48f3b27b62f3.jpg)
 
+### Features
 
-**Current STATUS : TESTED OK**
-- Autoscale up & down is working.
-  If you want to test, make sure you use small cooldown/thresold values, otherwise
-  it will take 1 hour to scale down for example.
+- Can be used on any RDS database or project.
+- Automatically increases or decreases RDS instance, based on CPU too high or low.
+- Have schedule mode with cron, so you can go bigger on weekday and back down at nights or weekends.
+- Handles credit balance on T2 instances, to upgrade to M/R if they run out of credits.
+- 100% configurable (thresholds, cooldowns, cron, resource names, etc)
+- Creates and uses CloudWatch alarms to determine when it needs to scale.
+- Output logs to CloudWatch logs for review
+- Built using security and IAM roles, maintains your infrastructure secure.
+- Simple terraform script you can apply/destroy with a single command.
+- Intangible cost to operate, it runs aprox. 300,000 sec/month and no more than 40Mb (free tier)
+- Will provide BIG savings over night or weekends (going m4.large to t2.small for example)
+- Based on the [Reactive Database System](http://mediatemple.net/blog/tips/the-reactive-database-system-letting-the-cloud-help-you/) by Dan Billeci.
+
+### Status
+
+Fully working, scale up / down or by schedule, or both.
+If you want to test, make sure you configure cooldown/thresold values to not
+have to wait and hour for downscale for example.
 
 **NOTE:** You will need to enable Multi-AZ on your RDS DB for this script to work,
 it will not autoscale databases without Multi-AZ enabled.
 
-To try this on your RDS:
+### How to use
+
 - Clone this GitHub.
 - Rename terraform.tfvars.example to terraform.tfvars
 - Configure your AWS access in terraform.tfvars
@@ -59,7 +72,25 @@ goes ahead and resize the instance to db.t2.micro (DB pointer 0).
 01:47:29 REPORT RequestId: 5fc4029e-f18e-11e6-975c-d54a6973df45	Duration: 1772.42 ms	Billed Duration: 1800 ms Memory Size: 128 MB	Max Memory Used: 41 MB
 ```
 
-I hope you find this useful to be done in Terraform, you also have the original (cloudformation/ansible) version.
+### Example savings
+
+##### Standard Setup (without ReDS) – High Performance required 24/7:
+
+M4.large – 100% monthly use: $261
+[- Amazon Calculator -](https://calculator.s3.amazonaws.com/index.html#r=PDX&s=RDS&key=calc-A2583B0A-0A08-48AE-A84F-86344E9723CD)
+
+##### ReDS Setup – High Performance during peak hours, with evenings lower + weekends lowest:
+
+M4.large – 24% monthly use (M-F 9-5): $67
+T2.medium – 50% monthly use (M-F off hours): $55
+T2.small – 26% monthly use (Sat/Sun all day): $18
+
+[- Amazon Calculator -](https://calculator.s3.amazonaws.com/index.html#r=IAD&s=RDS&key=calc-2451517A-F680-4AEF-AEE6-A9C1F2EFCAF8)
+
+In this example, you will save
+# 47% of your monthly RDS Cost
+
+I hope you found this useful and easy in Terraform.
 
 Best Regards,
 Ariel Sepulveda | cascompany AT gmail.com
