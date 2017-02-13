@@ -1,4 +1,40 @@
-AWS_ACCESS_KEY = "XXXXXXXXXXXXXX"
-AWS_SECRET_KEY = "XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx"
+#
+# Use this file to CONFIGURE your Terraform ReDS
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
+# AWS Region & Keys
+AWS_ACCESS_KEY   = "XXXXXXXXXXXXXXX"
+AWS_SECRET_KEY   = "YxYxYxYxYxYxYxYxYxYxYxYxYxYxYxYxY"
+# Note: At this time, only us-east-1, us-west-2, eu-west-1, ap-northeast-1,
+# ap-northeast-2, ap-southeast-2 and sa-east-1 have Multi-AZ available.
+AWS_REGION       = "us-west-2"
+### RDS Instance you want to configure for Auto-Scale.
+### It will ONLY WORK for RDS with Multi-AZ Enabled.
+### Set your RDS name, or comment and terraform will ask at plan/apply time.
+rds_instance     = "reds2"
+stack_prefix     = "reds"      # Used for resource names (prefix-resourcename)
+unique_name      = "build001"  # Random name for this build.
+enabled          = true        # Enable RDS Reactive Auto Scale
+schedule_enabled = false       # Enable RDS Scheduled Auto Scale
+scheduled_index  = "2"         # Instance size (0 to 4) to Scale on Schedule.
+### Instance sizes used to scale.
+instance_size_0  = "db.t2.micro"
+instance_size_1  = "db.t2.small"
+instance_size_2  = "db.m3.medium"
+instance_size_3  = "db.m4.large"
+instance_size_4  = "db.m4.xlarge"
+### Crons for use with schedule_enabled = true
+up_cron          = "0 15 * * 1-5"  # Cron for Scale UP RDS (schedule_enabled)
+down_cron        = "0 5 * * 2-6"   # Cron for Scale DOWN RDS (schedule_enabled)
+### Scale UP configuration (with enabled = true)
+up_threshold     = "80" # % of CPU use that makes RDS to scale UP.
+up_evaluations   = "10" # Number of evaluations (min) needed on this condition.
+up_cooldown      = "10" # Minutes to wait until Scale UP again. (Cooldown)
+### Scale DOWN configuration (with enabled = true)
+down_threshold   = "10" # % of CPU use that makes RDS to scale DOWN.
+down_evaluations = "5"  # Number of evaluations (min) needed on this condition.
+down_cooldown    = "45" # Minutes to wait until Scale DOWN again. (Cooldown)
+### Credit Alarm configurations
+credit_threshold    = "2"   # CPU Credits Exhausted Alarm threshold
+credit_evaluations  = "10"  # CPU Credits Exhausted Alarm eval. periods (min.)
+credits_cooldown    = "10"  # Cooldown for Credits

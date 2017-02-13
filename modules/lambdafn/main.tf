@@ -20,7 +20,6 @@ resource "null_resource" "buildlambdazip" {
   triggers { key = "${uuid()}" }
   provisioner "local-exec" {
   command = <<EOF
-  rm -rf lambda && rm -rf tmp
   mkdir lambda && mkdir tmp
   unzip reds/deps.zip -d lambda/
   cp reds/reds.py lambda/reds.py
@@ -78,6 +77,17 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call" {
   function_name = "${aws_lambda_function.rds_cas_autoscale_lambda.function_name}"
   principal = "events.amazonaws.com"
   source_arn = "${aws_cloudwatch_event_rule.every_five_minutes.arn}"
+}
+
+# Delete temporary resources
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+resource "null_resource" "deletetmp" {
+  triggers { key = "${uuid()}" }
+  depends_on = ["aws_lambda_function.rds_cas_autoscale_lambda"]
+  provisioner "local-exec" {
+  command = "rm -rf lambda && rm -rf tmp"
+  }
 }
 
 # Output function name

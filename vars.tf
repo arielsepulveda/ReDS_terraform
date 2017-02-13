@@ -17,22 +17,16 @@ variable "AWS_REGION" {
   description = "AWS Region where you have the RDS (remember to enable Multi-AZ)"
 }
 
-# Unique/Random for resource generation. {{timestamp}} not working?
-#
-# variable "timestamp_taken" { default = "{{timestamp}}" }
-#
-# In the mean time, will ask for a unique name, remove or change default.
+# Unique/Random for resource generation.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-variable "timestamp_taken" {
-  default = "testingnow"  # Change here for your default "unique" name ReDS.
+variable "unique_name" {
   description = "Enter Unique Name (lowercase)"
 }
 
 # MAIN CONFIGURATION, modify defaults, or it will ask them at apply/plan time
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 variable "rds_instance" {
-#  default = "your_rds_database"
-  description = "RDS Instance Name to Auto-Scale"
+  description = "Instance Name of the Multi-AZ Enabled AWS RDS"
 }
 variable "enabled" {
   default = true
@@ -52,11 +46,11 @@ variable "scheduled_index" {
 }
 # RDS Instance types that will be used in the auto-scaling
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-variable "instance_size_1" { default = "db.t2.micro" }
-variable "instance_size_2" { default = "db.t2.small" }
-variable "instance_size_3" { default = "db.m3.medium" }
-variable "instance_size_4" { default = "db.m4.large" }
-variable "instance_size_5" { default = "db.m4.xlarge" }
+variable "instance_size_0" { default = "db.t2.micro" }
+variable "instance_size_1" { default = "db.t2.small" }
+variable "instance_size_2" { default = "db.m3.medium" }
+variable "instance_size_3" { default = "db.m4.large" }
+variable "instance_size_4" { default = "db.m4.xlarge" }
 
 # Scale UP configuration (when will your RDS scale up?)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

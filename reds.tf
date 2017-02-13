@@ -7,7 +7,7 @@
 
 module "iamrole" {
   source     	  = "modules/iamrole"
-  unique_name	  = "${var.timestamp_taken}"
+  unique_name	  = "${var.unique_name}"
   stack_prefix  = "${var.stack_prefix}"
 }
 
@@ -16,7 +16,7 @@ module "iamrole" {
 
 module "cwalarms" {
   source        	    = "modules/cwalarms"
-  unique_name   	    = "${var.timestamp_taken}"
+  unique_name   	    = "${var.unique_name}"
   stack_prefix        = "${var.stack_prefix}"
   rds_instance		    = "${var.rds_instance}"
   up_threshold		    = "${var.up_threshold}"
@@ -45,11 +45,11 @@ data "template_file" "vars" {
       stack-prefix            = "${var.stack_prefix}"
       aws-region              = "${var.AWS_REGION}"
       rds-identifier          = "${var.rds_instance}"
-      instance-size-1         = "${var.instance_size_1}"
-      instance-size-2         = "${var.instance_size_2}"
-      instance-size-3         = "${var.instance_size_3}"
-      instance-size-4         = "${var.instance_size_4}"
-      instance-size-5         = "${var.instance_size_5}"
+      instance-size-1         = "${var.instance_size_0}"
+      instance-size-2         = "${var.instance_size_1}"
+      instance-size-3         = "${var.instance_size_2}"
+      instance-size-4         = "${var.instance_size_3}"
+      instance-size-5         = "${var.instance_size_4}"
       down-cron               = "${var.down_cron}"
       down-alarm-duration     = "${var.down_evaluations}"
       down-threshold          = "${var.down_threshold}"
@@ -72,8 +72,8 @@ data "template_file" "vars" {
 
 module "lambdafn" {
   source        	   = "modules/lambdafn"
-  unique_name   	   = "${var.timestamp_taken}"
-  lambda_file        = "tmp/${var.stack_prefix}-${var.timestamp_taken}.zip"
+  unique_name   	   = "${var.unique_name}"
+  lambda_file        = "tmp/${var.stack_prefix}-${var.unique_name}.zip"
   stack_prefix       = "${var.stack_prefix}"
   aws_iam_role_arn   = "${module.iamrole.aws_iam_role_arn}"
   alarms_yaml_render = "${data.template_file.alarms.rendered}"
