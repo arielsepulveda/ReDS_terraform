@@ -24,14 +24,14 @@ variable "AWS_REGION" {
 # In the mean time, will ask for a unique name, remove or change default.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 variable "timestamp_taken" {
-  default = "testok"  # Change here for your default "unique" name ReDS.
+  default = "testingnow"  # Change here for your default "unique" name ReDS.
   description = "Enter Unique Name (lowercase)"
 }
 
 # MAIN CONFIGURATION, modify defaults, or it will ask them at apply/plan time
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 variable "rds_instance" {
-  default = "reds2"
+#  default = "your_rds_database"
   description = "RDS Instance Name to Auto-Scale"
 }
 variable "enabled" {
@@ -39,7 +39,7 @@ variable "enabled" {
   description = "Enable RDS Resize"
 }
 variable "stack_prefix" {
-  default = "reds2"
+  default = "reds"
   description = "Stack prefix ( STACKPREFIX-resource_name )"
 }
 variable "schedule_enabled" {
@@ -65,11 +65,11 @@ variable "up_cron" {
   description = "Cron for CPU High"
 }
 variable "up_threshold" {
-  default = "15"
+  default = "80"
   description = "CPU High Alarm threshold"
 }
 variable "up_evaluations" {
-  default = "2"
+  default = "10"
   description = "CPU High Alarm evaluations periods"
 }
 variable "up_cooldown" {
@@ -84,7 +84,7 @@ variable "down_cron" {
   description = "Cron for CPU Low"
 }
 variable "down_threshold" {
-  default = "2"
+  default = "10"
   description = "CPU Low Alarm threshold"
 }
 variable "down_evaluations" {
