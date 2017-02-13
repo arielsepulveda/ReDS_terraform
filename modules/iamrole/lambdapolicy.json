@@ -1,0 +1,34 @@
+{
+  "Version": "2012-10-17",
+  "Statement" : [
+   {
+      "Sid"         : "ReDSlambdaDescribePolicy1",
+      "Effect"      : "Allow",
+      "Actions"     : [ "rds:DescribeDBInstances",
+                        "rds:DescribeEvents" ],
+      "Resources"   : [ "*" ]
+  } ],
+  "Statement" : [
+    {
+      "Sid"         : "ReDSlambdaModifyRDSPolicy1",
+      "Effect"      : "Allow",
+      "Actions"     : [ "rds:ModifyDBInstance" ],
+      "Resources"   : [ "*" ]
+  } ],
+  "Statement" : [
+    {
+      "Sid"         : "ReDSlambdaDescribePolicy2",
+      "Effect"      : "Allow",
+      "Actions"     : [ "cloudwatch:DescribeAlarms" ],
+      "Resources"   : [ "*" ]
+  } ],
+  "Statement" : [
+    {
+      "Sid"         : "ReDSlambdaLogsPolicy1",
+      "Effect"      : "Allow",
+       "Actions"    : [ "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents" ],
+       "Resources"  : [ "arn:aws:logs:*:*:*" ]
+   } ],
+}

@@ -41,8 +41,8 @@ EOF
 # Create lambda function
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-resource "aws_lambda_function" "ecs_ecs_autoscale_lambda" {
-  function_name   = "${var.stack_prefix}-lambda-${var.unique_name}"
+resource "aws_lambda_function" "rds_cas_autoscale_lambda" {
+  function_name   = "${var.stack_prefix}_lambda_${var.unique_name}"
   filename        = "${var.lambda_file}"
   role            = "${var.aws_iam_role_arn}"
   runtime         = "python2.7"
@@ -51,29 +51,38 @@ resource "aws_lambda_function" "ecs_ecs_autoscale_lambda" {
   depends_on      = ["null_resource.buildlambdazip"]
 }
 
-# Allow lambda to be called from cloudwatch
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-resource "aws_lambda_permission" "allow_cloudwatch_to_call" {
-  statement_id = "AllowExecutionFromCloudWatch"
-  action = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.ecs_ecs_autoscale_lambda.function_name}"
-  principal = "events.amazonaws.com"
-  source_arn = "${aws_lambda_function.ecs_ecs_autoscale_lambda.arn}"
-}
-
 # Run the function every 5 minutes.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 resource "aws_cloudwatch_event_rule" "every_five_minutes" {
-  name = "every-five-minutes"
+  name = "${var.stack_prefix}_lambda_event_${var.unique_name}"
   description = "Fires every five minutes"
   schedule_expression = "rate(5 minutes)"
+}
+
+# Assign event to Lambda target
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+resource "aws_cloudwatch_event_target" "check_every_five_minutes" {
+    rule = "${aws_cloudwatch_event_rule.every_five_minutes.name}"
+    target_id = "rds_cas_autoscale_lambda"
+    arn = "${aws_lambda_function.rds_cas_autoscale_lambda.arn}"
+}
+
+# Allow lambda to be called from cloudwatch
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call" {
+  statement_id = "${var.stack_prefix}_AllowExecutionFromCloudWatch_${var.unique_name}"
+  action = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.rds_cas_autoscale_lambda.function_name}"
+  principal = "events.amazonaws.com"
+  source_arn = "${aws_cloudwatch_event_rule.every_five_minutes.arn}"
 }
 
 # Output function name
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 output "lambda_function_name" {
-  value = "${aws_lambda_function.ecs_ecs_autoscale_lambda.function_name}"
+  value = "${aws_lambda_function.rds_cas_autoscale_lambda.function_name}"
 }
